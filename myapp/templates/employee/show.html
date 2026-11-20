@@ -1,0 +1,83 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Employee Records | Employee Management</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+
+  <body>
+    <main class="container">
+      <header class="page-header">
+        <h1>Employee Records</h1>
+        <p>Manage and view all registered employees.</p>
+      </header>
+
+      <section class="card">
+        <div class="navigation">
+          <a href="{% url 'createEmp' %}" class="btn btn-primary">
+            + Add New Employee
+          </a>
+        </div>
+
+        <br />
+
+        <div class="table-wrapper">
+          <table class="employee-table">
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>Full Name</th>
+                <th>Email Address</th>
+                <th>Contact</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for emp in employees %}
+
+              <tr>
+                <td>{{ emp.eid }}</td>
+                <td>{{ emp.ename }}</td>
+                <td>{{ emp.eemail }}</td>
+                <td>{{ emp.econtact }}</td>
+
+                <td>
+                  <div class="actions">
+                    <a href="{% url 'edit' emp.id %}" class="btn btn-secondary">
+                      Edit
+                    </a>
+
+                    <form method="POST" action="{% url 'delete' emp.id %}">
+                      {% csrf_token %}
+
+                      <button type="submit" class="btn btn-danger">
+                        Delete
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+
+              {% empty %}
+
+              <tr>
+                <td colspan="5" class="empty-state">
+                  No employee records found.
+                </td>
+              </tr>
+
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
